@@ -1,12 +1,12 @@
 package ru.yandex.yandexlavka.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.web.bind.annotation.*;
 import ru.yandex.yandexlavka.dto.CreateCourierRequestDto;
 import ru.yandex.yandexlavka.dto.CreateCourierResponseDto;
 import ru.yandex.yandexlavka.dto.CreatedCourierDto;
+import ru.yandex.yandexlavka.dto.GetCouriersResponseDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,7 @@ import java.util.Random;
 public class CourierController {
     private static Random random = new Random();
     List<CreatedCourierDto> couriers = new ArrayList<>();
+
     @PostMapping
     public CreateCourierResponseDto createCouriers(@RequestBody CreateCourierRequestDto request) {
         var createdCouriers = request.couriers().stream().map(courier -> new CreatedCourierDto(
@@ -26,5 +27,20 @@ public class CourierController {
                 courier.workingHours())).toList();
         couriers.addAll(createdCouriers);
         return new CreateCourierResponseDto(createdCouriers);
+    }
+
+    @GetMapping
+    public GetCouriersResponseDto getCouriersResponse(@RequestParam(defaultValue = "1") int limit,
+                                                      @RequestParam(defaultValue = "0") int offset) {
+        var result = this.couriers.subList(offset, offset + limit);
+        return new GetCouriersResponseDto(result, limit, offset);
+    }
+
+    @GetMapping("/{courier_id}")
+    public CreatedCourierDto getCourier(@PathVariable("courier_id") long id) {
+        return couriers.stream()
+                .filter(courier -> id == courier.courierId())
+                .findAny()
+                .orElse(null);
     }
 }
