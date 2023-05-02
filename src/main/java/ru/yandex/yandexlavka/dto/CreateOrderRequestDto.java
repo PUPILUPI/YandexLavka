@@ -1,4 +1,6 @@
 package ru.yandex.yandexlavka.dto;
 
-public record CreateOrderRequestDto() {
+import java.util.List;
+
+public record CreateOrderRequestDto(List<CreateOrderDto> orders) {
 }
