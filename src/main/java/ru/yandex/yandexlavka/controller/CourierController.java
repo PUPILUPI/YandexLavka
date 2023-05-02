@@ -1,7 +1,5 @@
 package ru.yandex.yandexlavka.controller;
 
-import org.springframework.boot.context.properties.bind.DefaultValue;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.yandexlavka.dto.CreateCourierRequestDto;
@@ -16,7 +14,7 @@ import java.util.Random;
 @RestController
 @RequestMapping("/couriers")
 public class CourierController {
-    private static Random random = new Random();
+    private final static Random random = new Random();
     List<CreatedCourierDto> couriers = new ArrayList<>();
 
     @PostMapping
@@ -41,12 +39,8 @@ public class CourierController {
     public ResponseEntity<CreatedCourierDto> getCourier(@PathVariable("courier_id") long id) {
         var courierById = couriers.stream()
                 .filter(courier -> id == courier.courierId())
-                .findAny()
-                .orElse(null);
-        if(courierById == null){
-            return ResponseEntity.notFound().build();
-        }else {
-            return ResponseEntity.ok(courierById);
-        }
+                .findAny();
+        return courierById.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
