@@ -1,9 +1,11 @@
 package ru.yandex.yandexlavka.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.yandexlavka.dto.CreateOrderRequestDto;
 import ru.yandex.yandexlavka.dto.CreatedOrderDto;
+import ru.yandex.yandexlavka.service.OrderService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +13,9 @@ import java.util.Random;
 
 @RestController
 @RequestMapping("/orders")
+@RequiredArgsConstructor
 public class OrderController {
+    private final OrderService service;
     private final static Random random = new Random();
     List<CreatedOrderDto> orders = new ArrayList<>();
 

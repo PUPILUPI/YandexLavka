@@ -17,14 +17,13 @@ services:
       - db:db_domain
     depends_on:
       - db
-
   db:
     container_name: yandex-lavka-db
     image: postgres:15.2
     volumes:
       - dbvolume:/var/lib/postgresql/dbvolume
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
