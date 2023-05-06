@@ -1,35 +1,55 @@
-package de.mokkapps.gamenews.api.model;
+package org.openapitools.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import org.openapitools.jackson.nullable.JsonNullable;
-import java.io.Serializable;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * CreateOrderDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:27:20.658336400+03:00[Europe/Moscow]")
 
-public class CreateOrderDto  implements Serializable {
-  private static final long serialVersionUID = 1L;
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:41:42.473217200+03:00[Europe/Moscow]")
+public class CreateOrderDto {
 
-  @JsonProperty("weight")
   private Float weight;
 
-  @JsonProperty("regions")
   private Integer regions;
 
-  @JsonProperty("delivery_hours")
-  
-  private List<String> deliveryHours = new ArrayList<String>();
+  @Valid
+  private List<String> deliveryHours = new ArrayList<>();
 
-  @JsonProperty("cost")
   private Integer cost;
+
+  /**
+   * Default constructor
+   * @deprecated Use {@link CreateOrderDto#CreateOrderDto(Float, Integer, List<String>, Integer)}
+   */
+  @Deprecated
+  public CreateOrderDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public CreateOrderDto(Float weight, Integer regions, List<String> deliveryHours, Integer cost) {
+    this.weight = weight;
+    this.regions = regions;
+    this.deliveryHours = deliveryHours;
+    this.cost = cost;
+  }
 
   public CreateOrderDto weight(Float weight) {
     this.weight = weight;
@@ -40,7 +60,9 @@ public class CreateOrderDto  implements Serializable {
    * Get weight
    * @return weight
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "weight", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("weight")
   public Float getWeight() {
     return weight;
   }
@@ -58,7 +80,9 @@ public class CreateOrderDto  implements Serializable {
    * Get regions
    * @return regions
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "regions", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("regions")
   public Integer getRegions() {
     return regions;
   }
@@ -73,6 +97,9 @@ public class CreateOrderDto  implements Serializable {
   }
 
   public CreateOrderDto addDeliveryHoursItem(String deliveryHoursItem) {
+    if (this.deliveryHours == null) {
+      this.deliveryHours = new ArrayList<>();
+    }
     this.deliveryHours.add(deliveryHoursItem);
     return this;
   }
@@ -81,7 +108,9 @@ public class CreateOrderDto  implements Serializable {
    * Get deliveryHours
    * @return deliveryHours
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "delivery_hours", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("delivery_hours")
   public List<String> getDeliveryHours() {
     return deliveryHours;
   }
@@ -99,7 +128,9 @@ public class CreateOrderDto  implements Serializable {
    * Get cost
    * @return cost
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "cost", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("cost")
   public Integer getCost() {
     return cost;
   }
@@ -108,9 +139,8 @@ public class CreateOrderDto  implements Serializable {
     this.cost = cost;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -133,7 +163,6 @@ public class CreateOrderDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CreateOrderDto {\n");
-    
     sb.append("    weight: ").append(toIndentedString(weight)).append("\n");
     sb.append("    regions: ").append(toIndentedString(regions)).append("\n");
     sb.append("    deliveryHours: ").append(toIndentedString(deliveryHours)).append("\n");
@@ -146,7 +175,7 @@ public class CreateOrderDto  implements Serializable {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

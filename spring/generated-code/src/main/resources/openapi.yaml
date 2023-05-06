@@ -1,0 +1,888 @@
+openapi: 3.0.1
+info:
+  title: Yandex Lavka
+  version: "1.0"
+servers:
+- url: /
+paths:
+  /orders:
+    get:
+      operationId: getOrders
+      parameters:
+      - description: "Максимальное количество заказов в выдаче. Если параметр не п\
+          ередан, то значение по умолчанию равно 1."
+        example: 10
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: "Количество заказов, которое нужно пропустить для отображения\
+          \ текущей страницы. Если параметр не передан, то значение по умолчанию р\
+          авно 0."
+        example: 0
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/OrderDto'
+                type: array
+          description: ok
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+          description: bad request
+      tags:
+      - order-controller
+      x-accepts: application/json
+      x-tags:
+      - tag: order-controller
+    post:
+      operationId: createOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/OrderDto'
+                type: array
+          description: ok
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+          description: bad request
+      tags:
+      - order-controller
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: order-controller
+  /orders/complete:
+    post:
+      operationId: completeOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteOrderRequestDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/OrderDto'
+                type: array
+          description: ok
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+          description: bad request
+      tags:
+      - order-controller
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: order-controller
+  /orders/assign:
+    post:
+      description: "Для распределения заказов между курьерами учитываются следующи\
+        е параметры: <ul><li>вес заказа</li><li>регион доставки</li><li>стоимость\
+        \ доставки</li></ul>"
+      operationId: ordersAssign
+      parameters:
+      - description: "Дата распределения заказов. Если не указана, то используется\
+          \ текущий день"
+        explode: true
+        in: query
+        name: date
+        required: false
+        schema:
+          format: date
+          type: string
+        style: form
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/OrderAssignResponse'
+                type: array
+          description: ok
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+          description: bad request
+      summary: Распределение заказов по курьерам
+      tags:
+      - order-controller
+      x-accepts: application/json
+      x-tags:
+      - tag: order-controller
+  /couriers/assignments:
+    get:
+      operationId: couriersAssignments
+      parameters:
+      - description: "Дата распределения заказов. Если не указана, то используется\
+          \ текущий день"
+        explode: true
+        in: query
+        name: date
+        required: false
+        schema:
+          format: date
+          type: string
+        style: form
+      - description: "Идентификатор курьера для получения списка распредленных зак\
+          азов. Если не указан, возвращаются данные по всем курьерам."
+        explode: true
+        in: query
+        name: courier_id
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderAssignResponse'
+          description: ok
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+          description: bad request
+      summary: Список распределенных заказов
+      tags:
+      - courier-controller
+      x-accepts: application/json
+      x-tags:
+      - tag: courier-controller
+  /couriers:
+    get:
+      operationId: getCouriers
+      parameters:
+      - description: "Максимальное количество курьеров в выдаче. Если параметр не\
+          \ передан, то значение по умолчанию равно 1."
+        example: 10
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: "Количество курьеров, которое нужно пропустить для отображени\
+          я текущей страницы. Если параметр не передан, то значение по умолчанию р\
+          авно 0."
+        example: 0
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCouriersResponse'
+          description: ok
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+          description: bad request
+      tags:
+      - courier-controller
+      x-accepts: application/json
+      x-tags:
+      - tag: courier-controller
+    post:
+      operationId: createCourier
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCourierRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCouriersResponse'
+          description: ok
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+          description: bad request
+      tags:
+      - courier-controller
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: courier-controller
+  /orders/{order_id}:
+    get:
+      operationId: getOrder
+      parameters:
+      - description: Order identifier
+        explode: false
+        in: path
+        name: order_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderDto'
+          description: ok
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+          description: bad request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+          description: not found
+      tags:
+      - order-controller
+      x-accepts: application/json
+      x-tags:
+      - tag: order-controller
+  /couriers/{courier_id}:
+    get:
+      operationId: getCourierById
+      parameters:
+      - description: Courier identifier
+        explode: false
+        in: path
+        name: courier_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourierDto'
+          description: ok
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+          description: bad request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+          description: not found
+      tags:
+      - courier-controller
+      x-accepts: application/json
+      x-tags:
+      - tag: courier-controller
+  /couriers/meta-info/{courier_id}:
+    get:
+      operationId: getCourierMetaInfo
+      parameters:
+      - description: Courier identifier
+        explode: false
+        in: path
+        name: courier_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      - description: Rating calculation start date
+        example: 2023-01-20
+        explode: true
+        in: query
+        name: startDate
+        required: true
+        schema:
+          format: date
+          type: string
+        style: form
+      - description: Rating calculation end date
+        example: 2023-01-21
+        explode: true
+        in: query
+        name: endDate
+        required: true
+        schema:
+          format: date
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCourierMetaInfoResponse'
+          description: OK
+      tags:
+      - courier-controller
+      x-accepts: application/json
+      x-tags:
+      - tag: courier-controller
+components:
+  schemas:
+    CreateOrderDto:
+      example:
+        regions: 6
+        cost: 1
+        weight: 0.8008282
+        delivery_hours:
+        - delivery_hours
+        - delivery_hours
+      properties:
+        weight:
+          format: float
+          type: number
+        regions:
+          format: int32
+          type: integer
+        delivery_hours:
+          items:
+            type: string
+          type: array
+        cost:
+          format: int32
+          type: integer
+      required:
+      - cost
+      - delivery_hours
+      - regions
+      - weight
+      type: object
+    CreateOrderRequest:
+      example:
+        orders:
+        - regions: 6
+          cost: 1
+          weight: 0.8008282
+          delivery_hours:
+          - delivery_hours
+          - delivery_hours
+        - regions: 6
+          cost: 1
+          weight: 0.8008282
+          delivery_hours:
+          - delivery_hours
+          - delivery_hours
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/CreateOrderDto'
+          type: array
+      required:
+      - orders
+      type: object
+    OrderDto:
+      example:
+        regions: 1
+        cost: 5
+        completed_time: 2000-01-23T04:56:07.000+00:00
+        weight: 6.0274563
+        delivery_hours:
+        - delivery_hours
+        - delivery_hours
+        order_id: 0
+      properties:
+        order_id:
+          format: int64
+          type: integer
+        weight:
+          format: float
+          type: number
+        regions:
+          format: int32
+          type: integer
+        delivery_hours:
+          items:
+            type: string
+          type: array
+        cost:
+          format: int32
+          type: integer
+        completed_time:
+          format: date-time
+          type: string
+      required:
+      - cost
+      - delivery_hours
+      - order_id
+      - regions
+      - weight
+      type: object
+    GroupOrders:
+      example:
+        group_order_id: 6
+        orders:
+        - regions: 1
+          cost: 5
+          completed_time: 2000-01-23T04:56:07.000+00:00
+          weight: 6.0274563
+          delivery_hours:
+          - delivery_hours
+          - delivery_hours
+          order_id: 0
+        - regions: 1
+          cost: 5
+          completed_time: 2000-01-23T04:56:07.000+00:00
+          weight: 6.0274563
+          delivery_hours:
+          - delivery_hours
+          - delivery_hours
+          order_id: 0
+      properties:
+        group_order_id:
+          format: int64
+          type: integer
+        orders:
+          items:
+            $ref: '#/components/schemas/OrderDto'
+          type: array
+      required:
+      - group_order_id
+      - orders
+      type: object
+    CouriersGroupOrders:
+      example:
+        courier_id: 0
+        orders:
+        - group_order_id: 6
+          orders:
+          - regions: 1
+            cost: 5
+            completed_time: 2000-01-23T04:56:07.000+00:00
+            weight: 6.0274563
+            delivery_hours:
+            - delivery_hours
+            - delivery_hours
+            order_id: 0
+          - regions: 1
+            cost: 5
+            completed_time: 2000-01-23T04:56:07.000+00:00
+            weight: 6.0274563
+            delivery_hours:
+            - delivery_hours
+            - delivery_hours
+            order_id: 0
+        - group_order_id: 6
+          orders:
+          - regions: 1
+            cost: 5
+            completed_time: 2000-01-23T04:56:07.000+00:00
+            weight: 6.0274563
+            delivery_hours:
+            - delivery_hours
+            - delivery_hours
+            order_id: 0
+          - regions: 1
+            cost: 5
+            completed_time: 2000-01-23T04:56:07.000+00:00
+            weight: 6.0274563
+            delivery_hours:
+            - delivery_hours
+            - delivery_hours
+            order_id: 0
+      properties:
+        courier_id:
+          format: int64
+          type: integer
+        orders:
+          items:
+            $ref: '#/components/schemas/GroupOrders'
+          type: array
+      required:
+      - courier_id
+      - orders
+      type: object
+    OrderAssignResponse:
+      example:
+        date: 2000-01-23
+        couriers:
+        - courier_id: 0
+          orders:
+          - group_order_id: 6
+            orders:
+            - regions: 1
+              cost: 5
+              completed_time: 2000-01-23T04:56:07.000+00:00
+              weight: 6.0274563
+              delivery_hours:
+              - delivery_hours
+              - delivery_hours
+              order_id: 0
+            - regions: 1
+              cost: 5
+              completed_time: 2000-01-23T04:56:07.000+00:00
+              weight: 6.0274563
+              delivery_hours:
+              - delivery_hours
+              - delivery_hours
+              order_id: 0
+          - group_order_id: 6
+            orders:
+            - regions: 1
+              cost: 5
+              completed_time: 2000-01-23T04:56:07.000+00:00
+              weight: 6.0274563
+              delivery_hours:
+              - delivery_hours
+              - delivery_hours
+              order_id: 0
+            - regions: 1
+              cost: 5
+              completed_time: 2000-01-23T04:56:07.000+00:00
+              weight: 6.0274563
+              delivery_hours:
+              - delivery_hours
+              - delivery_hours
+              order_id: 0
+        - courier_id: 0
+          orders:
+          - group_order_id: 6
+            orders:
+            - regions: 1
+              cost: 5
+              completed_time: 2000-01-23T04:56:07.000+00:00
+              weight: 6.0274563
+              delivery_hours:
+              - delivery_hours
+              - delivery_hours
+              order_id: 0
+            - regions: 1
+              cost: 5
+              completed_time: 2000-01-23T04:56:07.000+00:00
+              weight: 6.0274563
+              delivery_hours:
+              - delivery_hours
+              - delivery_hours
+              order_id: 0
+          - group_order_id: 6
+            orders:
+            - regions: 1
+              cost: 5
+              completed_time: 2000-01-23T04:56:07.000+00:00
+              weight: 6.0274563
+              delivery_hours:
+              - delivery_hours
+              - delivery_hours
+              order_id: 0
+            - regions: 1
+              cost: 5
+              completed_time: 2000-01-23T04:56:07.000+00:00
+              weight: 6.0274563
+              delivery_hours:
+              - delivery_hours
+              - delivery_hours
+              order_id: 0
+      properties:
+        date:
+          format: date
+          type: string
+        couriers:
+          items:
+            $ref: '#/components/schemas/CouriersGroupOrders'
+          type: array
+      required:
+      - couriers
+      - date
+      type: object
+    BadRequestResponse:
+      type: object
+    CompleteOrder:
+      example:
+        complete_time: 2000-01-23T04:56:07.000+00:00
+        courier_id: 0
+        order_id: 6
+      properties:
+        courier_id:
+          format: int64
+          type: integer
+        order_id:
+          format: int64
+          type: integer
+        complete_time:
+          format: date-time
+          type: string
+      required:
+      - complete_time
+      - courier_id
+      - order_id
+      type: object
+    CompleteOrderRequestDto:
+      example:
+        complete_info:
+        - complete_time: 2000-01-23T04:56:07.000+00:00
+          courier_id: 0
+          order_id: 6
+        - complete_time: 2000-01-23T04:56:07.000+00:00
+          courier_id: 0
+          order_id: 6
+      properties:
+        complete_info:
+          items:
+            $ref: '#/components/schemas/CompleteOrder'
+          type: array
+      required:
+      - complete_info
+      type: object
+    CreateCourierDto:
+      example:
+        regions:
+        - 0
+        - 0
+        working_hours:
+        - working_hours
+        - working_hours
+        courier_type: FOOT
+      properties:
+        courier_type:
+          enum:
+          - FOOT
+          - BIKE
+          - AUTO
+          type: string
+        regions:
+          items:
+            format: int32
+            type: integer
+          type: array
+        working_hours:
+          items:
+            type: string
+          type: array
+      required:
+      - courier_type
+      - regions
+      - working_hours
+      type: object
+    CreateCourierRequest:
+      example:
+        couriers:
+        - regions:
+          - 0
+          - 0
+          working_hours:
+          - working_hours
+          - working_hours
+          courier_type: FOOT
+        - regions:
+          - 0
+          - 0
+          working_hours:
+          - working_hours
+          - working_hours
+          courier_type: FOOT
+      properties:
+        couriers:
+          items:
+            $ref: '#/components/schemas/CreateCourierDto'
+          type: array
+      required:
+      - couriers
+      type: object
+    CourierDto:
+      example:
+        regions:
+        - 6
+        - 6
+        working_hours:
+        - working_hours
+        - working_hours
+        courier_id: 0
+        courier_type: FOOT
+      properties:
+        courier_id:
+          format: int64
+          type: integer
+        courier_type:
+          enum:
+          - FOOT
+          - BIKE
+          - AUTO
+          type: string
+        regions:
+          items:
+            format: int32
+            type: integer
+          type: array
+        working_hours:
+          items:
+            type: string
+          type: array
+      required:
+      - courier_id
+      - courier_type
+      - regions
+      - working_hours
+      type: object
+    CreateCouriersResponse:
+      example:
+        couriers:
+        - regions:
+          - 6
+          - 6
+          working_hours:
+          - working_hours
+          - working_hours
+          courier_id: 0
+          courier_type: FOOT
+        - regions:
+          - 6
+          - 6
+          working_hours:
+          - working_hours
+          - working_hours
+          courier_id: 0
+          courier_type: FOOT
+      properties:
+        couriers:
+          items:
+            $ref: '#/components/schemas/CourierDto'
+          type: array
+      required:
+      - couriers
+      type: object
+    NotFoundResponse:
+      type: object
+    GetCouriersResponse:
+      example:
+        couriers:
+        - regions:
+          - 6
+          - 6
+          working_hours:
+          - working_hours
+          - working_hours
+          courier_id: 0
+          courier_type: FOOT
+        - regions:
+          - 6
+          - 6
+          working_hours:
+          - working_hours
+          - working_hours
+          courier_id: 0
+          courier_type: FOOT
+        offset: 5
+        limit: 1
+      properties:
+        couriers:
+          items:
+            $ref: '#/components/schemas/CourierDto'
+          type: array
+        limit:
+          format: int32
+          type: integer
+        offset:
+          format: int32
+          type: integer
+      required:
+      - couriers
+      - limit
+      - offset
+      type: object
+    GetCourierMetaInfoResponse:
+      example:
+        earnings: 5
+        regions:
+        - 6
+        - 6
+        working_hours:
+        - working_hours
+        - working_hours
+        rating: 1
+        courier_id: 0
+        courier_type: FOOT
+      properties:
+        courier_id:
+          format: int64
+          type: integer
+        courier_type:
+          enum:
+          - FOOT
+          - BIKE
+          - AUTO
+          type: string
+        regions:
+          items:
+            format: int32
+            type: integer
+          type: array
+        working_hours:
+          items:
+            type: string
+          type: array
+        rating:
+          format: int32
+          type: integer
+        earnings:
+          format: int32
+          type: integer
+      required:
+      - courier_id
+      - courier_type
+      - regions
+      - working_hours
+      type: object

@@ -1,30 +1,50 @@
-package de.mokkapps.gamenews.api.model;
+package org.openapitools.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import de.mokkapps.gamenews.api.model.GroupOrders;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
+import org.openapitools.model.GroupOrders;
 import org.openapitools.jackson.nullable.JsonNullable;
-import java.io.Serializable;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * CouriersGroupOrders
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:27:20.658336400+03:00[Europe/Moscow]")
 
-public class CouriersGroupOrders  implements Serializable {
-  private static final long serialVersionUID = 1L;
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:41:42.473217200+03:00[Europe/Moscow]")
+public class CouriersGroupOrders {
 
-  @JsonProperty("courier_id")
   private Long courierId;
 
-  @JsonProperty("orders")
-  
-  private List<GroupOrders> orders = new ArrayList<GroupOrders>();
+  @Valid
+  private List<@Valid GroupOrders> orders = new ArrayList<>();
+
+  /**
+   * Default constructor
+   * @deprecated Use {@link CouriersGroupOrders#CouriersGroupOrders(Long, List<@Valid GroupOrders>)}
+   */
+  @Deprecated
+  public CouriersGroupOrders() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public CouriersGroupOrders(Long courierId, List<@Valid GroupOrders> orders) {
+    this.courierId = courierId;
+    this.orders = orders;
+  }
 
   public CouriersGroupOrders courierId(Long courierId) {
     this.courierId = courierId;
@@ -35,7 +55,9 @@ public class CouriersGroupOrders  implements Serializable {
    * Get courierId
    * @return courierId
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "courier_id", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("courier_id")
   public Long getCourierId() {
     return courierId;
   }
@@ -44,12 +66,15 @@ public class CouriersGroupOrders  implements Serializable {
     this.courierId = courierId;
   }
 
-  public CouriersGroupOrders orders(List<GroupOrders> orders) {
+  public CouriersGroupOrders orders(List<@Valid GroupOrders> orders) {
     this.orders = orders;
     return this;
   }
 
   public CouriersGroupOrders addOrdersItem(GroupOrders ordersItem) {
+    if (this.orders == null) {
+      this.orders = new ArrayList<>();
+    }
     this.orders.add(ordersItem);
     return this;
   }
@@ -58,18 +83,19 @@ public class CouriersGroupOrders  implements Serializable {
    * Get orders
    * @return orders
   */
-  @ApiModelProperty(required = true, value = "")
-  public List<GroupOrders> getOrders() {
+  @NotNull @Valid 
+  @Schema(name = "orders", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("orders")
+  public List<@Valid GroupOrders> getOrders() {
     return orders;
   }
 
-  public void setOrders(List<GroupOrders> orders) {
+  public void setOrders(List<@Valid GroupOrders> orders) {
     this.orders = orders;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -90,7 +116,6 @@ public class CouriersGroupOrders  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CouriersGroupOrders {\n");
-    
     sb.append("    courierId: ").append(toIndentedString(courierId)).append("\n");
     sb.append("    orders: ").append(toIndentedString(orders)).append("\n");
     sb.append("}");
@@ -101,7 +126,7 @@ public class CouriersGroupOrders  implements Serializable {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

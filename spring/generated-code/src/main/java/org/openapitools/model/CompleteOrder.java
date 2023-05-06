@@ -1,30 +1,52 @@
-package de.mokkapps.gamenews.api.model;
+package org.openapitools.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import java.util.Date;
+import java.time.OffsetDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.openapitools.jackson.nullable.JsonNullable;
-import java.io.Serializable;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * CompleteOrder
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:27:20.658336400+03:00[Europe/Moscow]")
 
-public class CompleteOrder  implements Serializable {
-  private static final long serialVersionUID = 1L;
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:41:42.473217200+03:00[Europe/Moscow]")
+public class CompleteOrder {
 
-  @JsonProperty("courier_id")
   private Long courierId;
 
-  @JsonProperty("order_id")
   private Long orderId;
 
-  @JsonProperty("complete_time")
-  private Date completeTime;
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private OffsetDateTime completeTime;
+
+  /**
+   * Default constructor
+   * @deprecated Use {@link CompleteOrder#CompleteOrder(Long, Long, OffsetDateTime)}
+   */
+  @Deprecated
+  public CompleteOrder() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public CompleteOrder(Long courierId, Long orderId, OffsetDateTime completeTime) {
+    this.courierId = courierId;
+    this.orderId = orderId;
+    this.completeTime = completeTime;
+  }
 
   public CompleteOrder courierId(Long courierId) {
     this.courierId = courierId;
@@ -35,7 +57,9 @@ public class CompleteOrder  implements Serializable {
    * Get courierId
    * @return courierId
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "courier_id", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("courier_id")
   public Long getCourierId() {
     return courierId;
   }
@@ -53,7 +77,9 @@ public class CompleteOrder  implements Serializable {
    * Get orderId
    * @return orderId
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "order_id", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("order_id")
   public Long getOrderId() {
     return orderId;
   }
@@ -62,7 +88,7 @@ public class CompleteOrder  implements Serializable {
     this.orderId = orderId;
   }
 
-  public CompleteOrder completeTime(Date completeTime) {
+  public CompleteOrder completeTime(OffsetDateTime completeTime) {
     this.completeTime = completeTime;
     return this;
   }
@@ -71,18 +97,19 @@ public class CompleteOrder  implements Serializable {
    * Get completeTime
    * @return completeTime
   */
-  @ApiModelProperty(required = true, value = "")
-  public Date getCompleteTime() {
+  @NotNull @Valid 
+  @Schema(name = "complete_time", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("complete_time")
+  public OffsetDateTime getCompleteTime() {
     return completeTime;
   }
 
-  public void setCompleteTime(Date completeTime) {
+  public void setCompleteTime(OffsetDateTime completeTime) {
     this.completeTime = completeTime;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -104,7 +131,6 @@ public class CompleteOrder  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CompleteOrder {\n");
-    
     sb.append("    courierId: ").append(toIndentedString(courierId)).append("\n");
     sb.append("    orderId: ").append(toIndentedString(orderId)).append("\n");
     sb.append("    completeTime: ").append(toIndentedString(completeTime)).append("\n");
@@ -116,7 +142,7 @@ public class CompleteOrder  implements Serializable {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

@@ -1,30 +1,50 @@
-package de.mokkapps.gamenews.api.model;
+package org.openapitools.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import de.mokkapps.gamenews.api.model.OrderDto;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
+import org.openapitools.model.OrderDto;
 import org.openapitools.jackson.nullable.JsonNullable;
-import java.io.Serializable;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * GroupOrders
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:27:20.658336400+03:00[Europe/Moscow]")
 
-public class GroupOrders  implements Serializable {
-  private static final long serialVersionUID = 1L;
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:41:42.473217200+03:00[Europe/Moscow]")
+public class GroupOrders {
 
-  @JsonProperty("group_order_id")
   private Long groupOrderId;
 
-  @JsonProperty("orders")
-  
-  private List<OrderDto> orders = new ArrayList<OrderDto>();
+  @Valid
+  private List<@Valid OrderDto> orders = new ArrayList<>();
+
+  /**
+   * Default constructor
+   * @deprecated Use {@link GroupOrders#GroupOrders(Long, List<@Valid OrderDto>)}
+   */
+  @Deprecated
+  public GroupOrders() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public GroupOrders(Long groupOrderId, List<@Valid OrderDto> orders) {
+    this.groupOrderId = groupOrderId;
+    this.orders = orders;
+  }
 
   public GroupOrders groupOrderId(Long groupOrderId) {
     this.groupOrderId = groupOrderId;
@@ -35,7 +55,9 @@ public class GroupOrders  implements Serializable {
    * Get groupOrderId
    * @return groupOrderId
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "group_order_id", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("group_order_id")
   public Long getGroupOrderId() {
     return groupOrderId;
   }
@@ -44,12 +66,15 @@ public class GroupOrders  implements Serializable {
     this.groupOrderId = groupOrderId;
   }
 
-  public GroupOrders orders(List<OrderDto> orders) {
+  public GroupOrders orders(List<@Valid OrderDto> orders) {
     this.orders = orders;
     return this;
   }
 
   public GroupOrders addOrdersItem(OrderDto ordersItem) {
+    if (this.orders == null) {
+      this.orders = new ArrayList<>();
+    }
     this.orders.add(ordersItem);
     return this;
   }
@@ -58,18 +83,19 @@ public class GroupOrders  implements Serializable {
    * Get orders
    * @return orders
   */
-  @ApiModelProperty(required = true, value = "")
-  public List<OrderDto> getOrders() {
+  @NotNull @Valid 
+  @Schema(name = "orders", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("orders")
+  public List<@Valid OrderDto> getOrders() {
     return orders;
   }
 
-  public void setOrders(List<OrderDto> orders) {
+  public void setOrders(List<@Valid OrderDto> orders) {
     this.orders = orders;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -90,7 +116,6 @@ public class GroupOrders  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GroupOrders {\n");
-    
     sb.append("    groupOrderId: ").append(toIndentedString(groupOrderId)).append("\n");
     sb.append("    orders: ").append(toIndentedString(orders)).append("\n");
     sb.append("}");
@@ -101,7 +126,7 @@ public class GroupOrders  implements Serializable {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

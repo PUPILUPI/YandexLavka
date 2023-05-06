@@ -1,34 +1,57 @@
-package de.mokkapps.gamenews.api.model;
+package org.openapitools.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import de.mokkapps.gamenews.api.model.CreateOrderDto;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
+import org.openapitools.model.CreateOrderDto;
 import org.openapitools.jackson.nullable.JsonNullable;
-import java.io.Serializable;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * CreateOrderRequest
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:27:20.658336400+03:00[Europe/Moscow]")
 
-public class CreateOrderRequest  implements Serializable {
-  private static final long serialVersionUID = 1L;
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:41:42.473217200+03:00[Europe/Moscow]")
+public class CreateOrderRequest {
 
-  @JsonProperty("orders")
-  
-  private List<CreateOrderDto> orders = new ArrayList<CreateOrderDto>();
+  @Valid
+  private List<@Valid CreateOrderDto> orders = new ArrayList<>();
 
-  public CreateOrderRequest orders(List<CreateOrderDto> orders) {
+  /**
+   * Default constructor
+   * @deprecated Use {@link CreateOrderRequest#CreateOrderRequest(List<@Valid CreateOrderDto>)}
+   */
+  @Deprecated
+  public CreateOrderRequest() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public CreateOrderRequest(List<@Valid CreateOrderDto> orders) {
+    this.orders = orders;
+  }
+
+  public CreateOrderRequest orders(List<@Valid CreateOrderDto> orders) {
     this.orders = orders;
     return this;
   }
 
   public CreateOrderRequest addOrdersItem(CreateOrderDto ordersItem) {
+    if (this.orders == null) {
+      this.orders = new ArrayList<>();
+    }
     this.orders.add(ordersItem);
     return this;
   }
@@ -37,18 +60,19 @@ public class CreateOrderRequest  implements Serializable {
    * Get orders
    * @return orders
   */
-  @ApiModelProperty(required = true, value = "")
-  public List<CreateOrderDto> getOrders() {
+  @NotNull @Valid 
+  @Schema(name = "orders", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("orders")
+  public List<@Valid CreateOrderDto> getOrders() {
     return orders;
   }
 
-  public void setOrders(List<CreateOrderDto> orders) {
+  public void setOrders(List<@Valid CreateOrderDto> orders) {
     this.orders = orders;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -68,7 +92,6 @@ public class CreateOrderRequest  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CreateOrderRequest {\n");
-    
     sb.append("    orders: ").append(toIndentedString(orders)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -78,7 +101,7 @@ public class CreateOrderRequest  implements Serializable {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

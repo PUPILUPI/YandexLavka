@@ -1,34 +1,57 @@
-package de.mokkapps.gamenews.api.model;
+package org.openapitools.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import de.mokkapps.gamenews.api.model.CompleteOrder;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
+import org.openapitools.model.CompleteOrder;
 import org.openapitools.jackson.nullable.JsonNullable;
-import java.io.Serializable;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * CompleteOrderRequestDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:27:20.658336400+03:00[Europe/Moscow]")
 
-public class CompleteOrderRequestDto  implements Serializable {
-  private static final long serialVersionUID = 1L;
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:41:42.473217200+03:00[Europe/Moscow]")
+public class CompleteOrderRequestDto {
 
-  @JsonProperty("complete_info")
-  
-  private List<CompleteOrder> completeInfo = new ArrayList<CompleteOrder>();
+  @Valid
+  private List<@Valid CompleteOrder> completeInfo = new ArrayList<>();
 
-  public CompleteOrderRequestDto completeInfo(List<CompleteOrder> completeInfo) {
+  /**
+   * Default constructor
+   * @deprecated Use {@link CompleteOrderRequestDto#CompleteOrderRequestDto(List<@Valid CompleteOrder>)}
+   */
+  @Deprecated
+  public CompleteOrderRequestDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public CompleteOrderRequestDto(List<@Valid CompleteOrder> completeInfo) {
+    this.completeInfo = completeInfo;
+  }
+
+  public CompleteOrderRequestDto completeInfo(List<@Valid CompleteOrder> completeInfo) {
     this.completeInfo = completeInfo;
     return this;
   }
 
   public CompleteOrderRequestDto addCompleteInfoItem(CompleteOrder completeInfoItem) {
+    if (this.completeInfo == null) {
+      this.completeInfo = new ArrayList<>();
+    }
     this.completeInfo.add(completeInfoItem);
     return this;
   }
@@ -37,18 +60,19 @@ public class CompleteOrderRequestDto  implements Serializable {
    * Get completeInfo
    * @return completeInfo
   */
-  @ApiModelProperty(required = true, value = "")
-  public List<CompleteOrder> getCompleteInfo() {
+  @NotNull @Valid 
+  @Schema(name = "complete_info", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("complete_info")
+  public List<@Valid CompleteOrder> getCompleteInfo() {
     return completeInfo;
   }
 
-  public void setCompleteInfo(List<CompleteOrder> completeInfo) {
+  public void setCompleteInfo(List<@Valid CompleteOrder> completeInfo) {
     this.completeInfo = completeInfo;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -68,7 +92,6 @@ public class CompleteOrderRequestDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CompleteOrderRequestDto {\n");
-    
     sb.append("    completeInfo: ").append(toIndentedString(completeInfo)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -78,7 +101,7 @@ public class CompleteOrderRequestDto  implements Serializable {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

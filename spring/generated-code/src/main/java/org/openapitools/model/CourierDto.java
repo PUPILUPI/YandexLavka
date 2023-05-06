@@ -1,25 +1,29 @@
-package de.mokkapps.gamenews.api.model;
+package org.openapitools.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import org.openapitools.jackson.nullable.JsonNullable;
-import java.io.Serializable;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * CourierDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:27:20.658336400+03:00[Europe/Moscow]")
 
-public class CourierDto  implements Serializable {
-  private static final long serialVersionUID = 1L;
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:41:42.473217200+03:00[Europe/Moscow]")
+public class CourierDto {
 
-  @JsonProperty("courier_id")
   private Long courierId;
 
   /**
@@ -59,16 +63,32 @@ public class CourierDto  implements Serializable {
     }
   }
 
-  @JsonProperty("courier_type")
   private CourierTypeEnum courierType;
 
-  @JsonProperty("regions")
-  
-  private List<Integer> regions = new ArrayList<Integer>();
+  @Valid
+  private List<Integer> regions = new ArrayList<>();
 
-  @JsonProperty("working_hours")
-  
-  private List<String> workingHours = new ArrayList<String>();
+  @Valid
+  private List<String> workingHours = new ArrayList<>();
+
+  /**
+   * Default constructor
+   * @deprecated Use {@link CourierDto#CourierDto(Long, CourierTypeEnum, List<Integer>, List<String>)}
+   */
+  @Deprecated
+  public CourierDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public CourierDto(Long courierId, CourierTypeEnum courierType, List<Integer> regions, List<String> workingHours) {
+    this.courierId = courierId;
+    this.courierType = courierType;
+    this.regions = regions;
+    this.workingHours = workingHours;
+  }
 
   public CourierDto courierId(Long courierId) {
     this.courierId = courierId;
@@ -79,7 +99,9 @@ public class CourierDto  implements Serializable {
    * Get courierId
    * @return courierId
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "courier_id", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("courier_id")
   public Long getCourierId() {
     return courierId;
   }
@@ -97,7 +119,9 @@ public class CourierDto  implements Serializable {
    * Get courierType
    * @return courierType
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "courier_type", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("courier_type")
   public CourierTypeEnum getCourierType() {
     return courierType;
   }
@@ -112,6 +136,9 @@ public class CourierDto  implements Serializable {
   }
 
   public CourierDto addRegionsItem(Integer regionsItem) {
+    if (this.regions == null) {
+      this.regions = new ArrayList<>();
+    }
     this.regions.add(regionsItem);
     return this;
   }
@@ -120,7 +147,9 @@ public class CourierDto  implements Serializable {
    * Get regions
    * @return regions
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "regions", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("regions")
   public List<Integer> getRegions() {
     return regions;
   }
@@ -135,6 +164,9 @@ public class CourierDto  implements Serializable {
   }
 
   public CourierDto addWorkingHoursItem(String workingHoursItem) {
+    if (this.workingHours == null) {
+      this.workingHours = new ArrayList<>();
+    }
     this.workingHours.add(workingHoursItem);
     return this;
   }
@@ -143,7 +175,9 @@ public class CourierDto  implements Serializable {
    * Get workingHours
    * @return workingHours
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "working_hours", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("working_hours")
   public List<String> getWorkingHours() {
     return workingHours;
   }
@@ -152,9 +186,8 @@ public class CourierDto  implements Serializable {
     this.workingHours = workingHours;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -177,7 +210,6 @@ public class CourierDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CourierDto {\n");
-    
     sb.append("    courierId: ").append(toIndentedString(courierId)).append("\n");
     sb.append("    courierType: ").append(toIndentedString(courierType)).append("\n");
     sb.append("    regions: ").append(toIndentedString(regions)).append("\n");
@@ -190,7 +222,7 @@ public class CourierDto  implements Serializable {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

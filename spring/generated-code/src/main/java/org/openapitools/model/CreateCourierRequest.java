@@ -1,34 +1,57 @@
-package de.mokkapps.gamenews.api.model;
+package org.openapitools.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import de.mokkapps.gamenews.api.model.CreateCourierDto;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
+import org.openapitools.model.CreateCourierDto;
 import org.openapitools.jackson.nullable.JsonNullable;
-import java.io.Serializable;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * CreateCourierRequest
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:27:20.658336400+03:00[Europe/Moscow]")
 
-public class CreateCourierRequest  implements Serializable {
-  private static final long serialVersionUID = 1L;
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:41:42.473217200+03:00[Europe/Moscow]")
+public class CreateCourierRequest {
 
-  @JsonProperty("couriers")
-  
-  private List<CreateCourierDto> couriers = new ArrayList<CreateCourierDto>();
+  @Valid
+  private List<@Valid CreateCourierDto> couriers = new ArrayList<>();
 
-  public CreateCourierRequest couriers(List<CreateCourierDto> couriers) {
+  /**
+   * Default constructor
+   * @deprecated Use {@link CreateCourierRequest#CreateCourierRequest(List<@Valid CreateCourierDto>)}
+   */
+  @Deprecated
+  public CreateCourierRequest() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public CreateCourierRequest(List<@Valid CreateCourierDto> couriers) {
+    this.couriers = couriers;
+  }
+
+  public CreateCourierRequest couriers(List<@Valid CreateCourierDto> couriers) {
     this.couriers = couriers;
     return this;
   }
 
   public CreateCourierRequest addCouriersItem(CreateCourierDto couriersItem) {
+    if (this.couriers == null) {
+      this.couriers = new ArrayList<>();
+    }
     this.couriers.add(couriersItem);
     return this;
   }
@@ -37,18 +60,19 @@ public class CreateCourierRequest  implements Serializable {
    * Get couriers
    * @return couriers
   */
-  @ApiModelProperty(required = true, value = "")
-  public List<CreateCourierDto> getCouriers() {
+  @NotNull @Valid 
+  @Schema(name = "couriers", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("couriers")
+  public List<@Valid CreateCourierDto> getCouriers() {
     return couriers;
   }
 
-  public void setCouriers(List<CreateCourierDto> couriers) {
+  public void setCouriers(List<@Valid CreateCourierDto> couriers) {
     this.couriers = couriers;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -68,7 +92,6 @@ public class CreateCourierRequest  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class CreateCourierRequest {\n");
-    
     sb.append("    couriers: ").append(toIndentedString(couriers)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -78,7 +101,7 @@ public class CreateCourierRequest  implements Serializable {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

@@ -1,42 +1,63 @@
-package de.mokkapps.gamenews.api.model;
+package org.openapitools.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.openapitools.jackson.nullable.JsonNullable;
-import java.io.Serializable;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * OrderDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:27:20.658336400+03:00[Europe/Moscow]")
 
-public class OrderDto  implements Serializable {
-  private static final long serialVersionUID = 1L;
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-06T14:41:42.473217200+03:00[Europe/Moscow]")
+public class OrderDto {
 
-  @JsonProperty("order_id")
   private Long orderId;
 
-  @JsonProperty("weight")
   private Float weight;
 
-  @JsonProperty("regions")
   private Integer regions;
 
-  @JsonProperty("delivery_hours")
-  
-  private List<String> deliveryHours = new ArrayList<String>();
+  @Valid
+  private List<String> deliveryHours = new ArrayList<>();
 
-  @JsonProperty("cost")
   private Integer cost;
 
-  @JsonProperty("completed_time")
-  private Date completedTime;
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private OffsetDateTime completedTime;
+
+  /**
+   * Default constructor
+   * @deprecated Use {@link OrderDto#OrderDto(Long, Float, Integer, List<String>, Integer)}
+   */
+  @Deprecated
+  public OrderDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public OrderDto(Long orderId, Float weight, Integer regions, List<String> deliveryHours, Integer cost) {
+    this.orderId = orderId;
+    this.weight = weight;
+    this.regions = regions;
+    this.deliveryHours = deliveryHours;
+    this.cost = cost;
+  }
 
   public OrderDto orderId(Long orderId) {
     this.orderId = orderId;
@@ -47,7 +68,9 @@ public class OrderDto  implements Serializable {
    * Get orderId
    * @return orderId
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "order_id", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("order_id")
   public Long getOrderId() {
     return orderId;
   }
@@ -65,7 +88,9 @@ public class OrderDto  implements Serializable {
    * Get weight
    * @return weight
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "weight", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("weight")
   public Float getWeight() {
     return weight;
   }
@@ -83,7 +108,9 @@ public class OrderDto  implements Serializable {
    * Get regions
    * @return regions
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "regions", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("regions")
   public Integer getRegions() {
     return regions;
   }
@@ -98,6 +125,9 @@ public class OrderDto  implements Serializable {
   }
 
   public OrderDto addDeliveryHoursItem(String deliveryHoursItem) {
+    if (this.deliveryHours == null) {
+      this.deliveryHours = new ArrayList<>();
+    }
     this.deliveryHours.add(deliveryHoursItem);
     return this;
   }
@@ -106,7 +136,9 @@ public class OrderDto  implements Serializable {
    * Get deliveryHours
    * @return deliveryHours
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "delivery_hours", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("delivery_hours")
   public List<String> getDeliveryHours() {
     return deliveryHours;
   }
@@ -124,7 +156,9 @@ public class OrderDto  implements Serializable {
    * Get cost
    * @return cost
   */
-  @ApiModelProperty(required = true, value = "")
+  @NotNull 
+  @Schema(name = "cost", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("cost")
   public Integer getCost() {
     return cost;
   }
@@ -133,7 +167,7 @@ public class OrderDto  implements Serializable {
     this.cost = cost;
   }
 
-  public OrderDto completedTime(Date completedTime) {
+  public OrderDto completedTime(OffsetDateTime completedTime) {
     this.completedTime = completedTime;
     return this;
   }
@@ -142,18 +176,19 @@ public class OrderDto  implements Serializable {
    * Get completedTime
    * @return completedTime
   */
-  @ApiModelProperty(value = "")
-  public Date getCompletedTime() {
+  @Valid 
+  @Schema(name = "completed_time", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("completed_time")
+  public OffsetDateTime getCompletedTime() {
     return completedTime;
   }
 
-  public void setCompletedTime(Date completedTime) {
+  public void setCompletedTime(OffsetDateTime completedTime) {
     this.completedTime = completedTime;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -178,7 +213,6 @@ public class OrderDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class OrderDto {\n");
-    
     sb.append("    orderId: ").append(toIndentedString(orderId)).append("\n");
     sb.append("    weight: ").append(toIndentedString(weight)).append("\n");
     sb.append("    regions: ").append(toIndentedString(regions)).append("\n");
@@ -193,7 +227,7 @@ public class OrderDto  implements Serializable {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }
