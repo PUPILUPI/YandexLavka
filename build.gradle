@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.4'
     id 'io.spring.dependency-management' version '1.1.0'
+    id "org.openapi.generator" version "4.2.3"
 }
 
 group = 'ru.yandex'
@@ -20,6 +21,50 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compileOnly 'org.projectlombok:lombok:1.18.20'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+}
+compileJava.dependsOn('openApiGenerate')
+sourceSets {
+    main {
+        java {
+            srcDir "${rootDir}/src/main/java/ru/yandex/yandexlavka"
+        }
+    }
+}
+
+openApiValidate {
+    inputSpec = "${rootDir}/openapi/openapi.json".toString()
+}
+
+openApiGenerate {
+    generatorName = "spring"
+    library = "spring-boot"
+    inputSpec = "${rootDir}/openapi/openapi.json".toString()
+    outputDir = "${rootDir}/backend/openapi".toString()
+    systemProperties = [
+            modelDocs      : "false",
+            models         : "",
+            apis           : "",
+            supportingFiles: "false"
+    ]
+    configOptions = [
+            useOptional          : "true",
+            swaggerDocketConfig  : "false",
+            performBeanValidation: "false",
+            useBeanValidation    : "false",
+            useTags              : "true",
+            singleContentTypes   : "true",
+            basePackage          : "de.mokkapps.gamenews.api",
+            configPackage        : "de.mokkapps.gamenews.api",
+            title                : rootProject.name,
+            java8                : "false",
+            dateLibrary          : "java17",
+            serializableModel    : "true",
+            artifactId           : rootProject.name,
+            apiPackage           : "de.mokkapps.gamenews.api",
+            modelPackage         : "de.mokkapps.gamenews.api.model",
+            invokerPackage       : "de.mokkapps.gamenews.api",
+            interfaceOnly        : "false"
+    ]
 }
 
 tasks.named('test') {

@@ -1,1 +1,2 @@
-# Шаблон для решения вступительного задания Java
+# run 'gradle openApiGenerate' to generate code
+# need fixes in openApiGenerate gradle task
