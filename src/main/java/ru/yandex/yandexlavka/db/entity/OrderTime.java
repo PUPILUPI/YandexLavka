@@ -15,13 +15,14 @@ import java.time.LocalTime;
 @EqualsAndHashCode(exclude = "order")
 public class OrderTime {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
-    @Column(name = "from")
+    @Column(name = "from_time")
     private LocalTime from;
-    @Column(name = "to")
+    @Column(name = "to_time")
     private LocalTime to;
 }

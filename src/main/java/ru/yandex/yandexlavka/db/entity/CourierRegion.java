@@ -14,9 +14,10 @@ import lombok.*;
 @EqualsAndHashCode(exclude = "courier")
 public class CourierRegion {
     @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "courier_id", referencedColumnName = "id")
     private Courier courier;
     @Column(name = "zipcode")

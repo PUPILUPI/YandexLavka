@@ -9,14 +9,14 @@ CREATE TABLE orders
 CREATE TABLE couriers
 (
     id            BIGSERIAL PRIMARY KEY,
-    courier_type  VARCHAR(20) NOT NULL CHECK (courier_type IN ('FOOT', 'BIKE', 'AUTO')),
+    courier_type  VARCHAR(20) NOT NULL CHECK (courier_type IN ('FOOT', 'BIKE', 'AUTO'))
 );
 CREATE TABLE courier_schedule
 (
     id         BIGSERIAL PRIMARY KEY,
     courier_id BIGINT REFERENCES couriers (id),
-    from       time NOT NULL,
-    to         time NOT NULL
+    from_time      time NOT NULL,
+    to_time         time NOT NULL
 );
 CREATE TABLE courier_regions
 (
@@ -29,6 +29,6 @@ CREATE TABLE order_time
 (
     id       BIGSERIAL PRIMARY KEY,
     order_id BIGINT REFERENCES orders (id),
-    from     time NOT NULL,
-    to       time NOT NULL
+    from_time     time NOT NULL,
+    to_time       time NOT NULL
 );

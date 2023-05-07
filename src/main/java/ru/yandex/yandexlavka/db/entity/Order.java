@@ -16,13 +16,14 @@ import java.util.Set;
 @Table(name = "orders")
 public class Order {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     Long id;
     @Column(name = "weight")
     float weight;
     @Column(name = "regions")
     int region;
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     Set<OrderTime> deliveryHours;
     @Column(name = "cost")
     int cost;

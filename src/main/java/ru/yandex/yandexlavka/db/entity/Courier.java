@@ -2,9 +2,6 @@ package ru.yandex.yandexlavka.db.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.yandex.yandexlavka.dto.CourierTypeDto;
-
-import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -16,12 +13,14 @@ import java.util.Set;
 @Table(name = "couriers")
 public class Courier {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @Column(name = "courier_type")
-    private CourierTypeDto type;
-    @OneToMany(mappedBy = "courier", fetch = FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
+    private CourierType type;
+    @OneToMany(mappedBy = "courier", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<CourierRegion> regions;
-    @OneToMany(mappedBy = "courier", fetch = FetchType.LAZY)
-    private List<CourierSchedule> workingHours;
+    @OneToMany(mappedBy = "courier", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<CourierSchedule> workingHours;
 }

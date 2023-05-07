@@ -2,10 +2,10 @@ package ru.yandex.yandexlavka.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
+import java.util.Set;
 
 public record CreateCourierDto(
-        @JsonProperty("courier_type") CourierTypeDto courierType,
-        @JsonProperty("regions") List<Integer> regions,
-        @JsonProperty("working_hours") List<String> workingHours
+        @JsonProperty("courier_type") CourierTypeDto courierTypeDto,
+        @JsonProperty("regions") Set<Integer> regions,
+        @JsonProperty("working_hours") Set<String> workingHours
 ) {}
