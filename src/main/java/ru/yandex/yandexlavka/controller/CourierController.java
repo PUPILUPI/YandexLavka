@@ -26,16 +26,7 @@ public class CourierController {
     @PostMapping
     public CreateCourierResponseDto createCouriers(@RequestBody CreateCourierRequestDto request) {
         var couriers = request.couriers().stream()
-                .map(courier -> {
-                    Courier newCourier = Courier.builder()
-                            .type(CourierType.valueOf(courier.courierTypeDto().name()))
-                            .regions(convertToCourierRegions(courier.regions()))
-                            .workingHours(convertToCourierSchedule(courier.workingHours()))
-                            .build();
-                    newCourier.getRegions().forEach(region -> region.setCourier(newCourier));
-                    newCourier.getWorkingHours().forEach(interval -> interval.setCourier(newCourier));
-                    return newCourier;
-                })
+                .map(CourierController::convertToCourier)
                 .toList();
 //        получаем на вход CreateCourierRequestDto, должны вернуть CreateCourierResponseDto
 //        берем из CreateCourierRequestDto request List<CreateCourierDto> couriers и конвертируем из CreateCourierDto
@@ -43,11 +34,7 @@ public class CourierController {
 //        который содержит в себе CreatedCourierDto
         var createdCouriers = service.createCouriers(couriers)
                 .stream()
-                .map(courier -> new CreatedCourierDto(
-                        courier.getId(),
-                        CourierTypeDto.valueOf(courier.getType().name()),
-                        convertToCourierRegionDto(courier.getRegions()),
-                        convertToCourierScheduleDto(courier.getWorkingHours())))
+                .map(CourierController::convertToCreatedCourierDto)
                 .toList();
         return new CreateCourierResponseDto(createdCouriers);
     }
@@ -57,11 +44,7 @@ public class CourierController {
                                                       @RequestParam(defaultValue = "0") int offset) {
         var result = service.getCouriers(limit, offset)
                 .stream()
-                .map(courier -> new CreatedCourierDto(
-                        courier.getId(),
-                        CourierTypeDto.valueOf(courier.getType().name()),
-                        convertToCourierRegionDto(courier.getRegions()),
-                        convertToCourierScheduleDto(courier.getWorkingHours())))
+                .map(CourierController::convertToCreatedCourierDto)
                 .toList();
         return new GetCouriersResponseDto(result, limit, offset);
     }
@@ -69,16 +52,12 @@ public class CourierController {
     @GetMapping("/{courier_id}")
     public ResponseEntity<CreatedCourierDto> getCourier(@PathVariable("courier_id") long id) {
         var courierById = service.getCourier(id);
-        return courierById.map(courier -> new CreatedCourierDto(
-                        courier.getId(),
-                        CourierTypeDto.valueOf(courier.getType().name()),
-                        convertToCourierRegionDto(courier.getRegions()),
-                        convertToCourierScheduleDto(courier.getWorkingHours())))
+        return courierById.map(CourierController::convertToCreatedCourierDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public static Set<CourierRegion> convertToCourierRegions(Set<Integer> regions) {
+    private static Set<CourierRegion> convertToCourierRegions(Set<Integer> regions) {
         return regions.stream()
                 .map(region -> CourierRegion.builder()
                         .zipcode(region)
@@ -86,7 +65,7 @@ public class CourierController {
                 .collect(Collectors.toSet());
     }
 
-    public static Set<CourierSchedule> convertToCourierSchedule(Set<String> workingHours) {
+    private static Set<CourierSchedule> convertToCourierSchedule(Set<String> workingHours) {
         return workingHours.stream()
                 .map(interval -> {
                     String[] time = interval.split("-");
@@ -98,15 +77,34 @@ public class CourierController {
                 .collect(Collectors.toSet());
     }
 
-    public static Set<String> convertToCourierScheduleDto(Set<CourierSchedule> workingHours) {
+    private static Set<String> convertToCourierScheduleDto(Set<CourierSchedule> workingHours) {
         return workingHours.stream()
                 .map(interval -> interval.getFrom() + "-" + interval.getTo())
                 .collect(Collectors.toSet());
     }
 
-    public static Set<Integer> convertToCourierRegionDto(Set<CourierRegion> regions) {
+    private static Set<Integer> convertToCourierRegionDto(Set<CourierRegion> regions) {
         return regions.stream()
                 .map(CourierRegion::getZipcode)
                 .collect(Collectors.toSet());
+    }
+
+    private static Courier convertToCourier(CreateCourierDto courierDto) {
+        Courier newCourier = Courier.builder()
+                .type(CourierType.valueOf(courierDto.courierTypeDto().name()))
+                .regions(convertToCourierRegions(courierDto.regions()))
+                .workingHours(convertToCourierSchedule(courierDto.workingHours()))
+                .build();
+        newCourier.getRegions().forEach(region -> region.setCourier(newCourier));
+        newCourier.getWorkingHours().forEach(interval -> interval.setCourier(newCourier));
+        return newCourier;
+    }
+
+    private static CreatedCourierDto convertToCreatedCourierDto(Courier courier) {
+        return new CreatedCourierDto(
+                courier.getId(),
+                CourierTypeDto.valueOf(courier.getType().name()),
+                convertToCourierRegionDto(courier.getRegions()),
+                convertToCourierScheduleDto(courier.getWorkingHours()));
     }
 }

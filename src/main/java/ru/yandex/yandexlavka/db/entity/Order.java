@@ -1,10 +1,8 @@
 package ru.yandex.yandexlavka.db.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -18,15 +16,18 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    Long id;
+    private Long id;
     @Column(name = "weight")
-    float weight;
+    private float weight;
     @Column(name = "regions")
-    int region;
+    private int region;
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    Set<OrderTime> deliveryHours;
+    private Set<OrderTime> deliveryHours;
     @Column(name = "cost")
-    int cost;
+    private int cost;
     @Column(name = "completed_time")
-    String completedTime;
+    private LocalDateTime completedTime;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "courier_id", referencedColumnName = "id")
+    private Courier courier;
 }
