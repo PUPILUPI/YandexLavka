@@ -1,7 +1,6 @@
 package ru.yandex.yandexlavka.db.entity;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public enum CourierType {

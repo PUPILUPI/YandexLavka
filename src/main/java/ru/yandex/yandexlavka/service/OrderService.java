@@ -2,7 +2,6 @@ package ru.yandex.yandexlavka.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.yandexlavka.db.entity.Courier;
 import ru.yandex.yandexlavka.db.entity.Order;
 import ru.yandex.yandexlavka.db.repository.OrderRepository;
 
