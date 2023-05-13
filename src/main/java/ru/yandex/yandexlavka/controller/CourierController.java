@@ -3,16 +3,14 @@ package ru.yandex.yandexlavka.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.yandexlavka.db.entity.Courier;
-import ru.yandex.yandexlavka.db.entity.CourierRegion;
-import ru.yandex.yandexlavka.db.entity.CourierSchedule;
-import ru.yandex.yandexlavka.db.entity.CourierType;
+import ru.yandex.yandexlavka.db.entity.*;
 import ru.yandex.yandexlavka.dto.*;
 import ru.yandex.yandexlavka.service.CourierService;
+import ru.yandex.yandexlavka.util.RateLimiterDecorator;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,40 +19,67 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CourierController {
     private final CourierService service;
-    List<CreatedCourierDto> couriers = new ArrayList<>();
+    private final RateLimiterDecorator rateLimiterDecorator;
 
     @PostMapping
-    public CreateCourierResponseDto createCouriers(@RequestBody CreateCourierRequestDto request) {
-        var couriers = request.couriers().stream()
-                .map(CourierController::convertToCourier)
-                .toList();
-//        получаем на вход CreateCourierRequestDto, должны вернуть CreateCourierResponseDto
-//        берем из CreateCourierRequestDto request List<CreateCourierDto> couriers и конвертируем из CreateCourierDto
-//        Courier, затем сохраняем их в бд и должны вернуть CreateCourierResponseDto,
-//        который содержит в себе CreatedCourierDto
-        var createdCouriers = service.createCouriers(couriers)
-                .stream()
-                .map(CourierController::convertToCreatedCourierDto)
-                .toList();
-        return new CreateCourierResponseDto(createdCouriers);
+    public ResponseEntity<CreateCourierResponseDto> createCouriers(@RequestBody CreateCourierRequestDto request) {
+        return rateLimiterDecorator.execute("rateLimiter-createCouriers", () -> {
+            var couriers = request.couriers().stream()
+                    .map(CourierController::convertToCourier)
+                    .toList();
+            var createdCouriers = service.createCouriers(couriers)
+                    .stream()
+                    .map(CourierController::convertToCreatedCourierDto)
+                    .toList();
+            return ResponseEntity.ok(new CreateCourierResponseDto(createdCouriers));
+        });
     }
 
     @GetMapping
-    public GetCouriersResponseDto getCouriersResponse(@RequestParam(defaultValue = "1") int limit,
-                                                      @RequestParam(defaultValue = "0") int offset) {
-        var result = service.getCouriers(limit, offset)
-                .stream()
-                .map(CourierController::convertToCreatedCourierDto)
-                .toList();
-        return new GetCouriersResponseDto(result, limit, offset);
+    public ResponseEntity<GetCouriersResponseDto> getCouriersResponse(@RequestParam(defaultValue = "1") int limit,
+                                                                      @RequestParam(defaultValue = "0") int offset) {
+        return rateLimiterDecorator.execute("rateLimiter-getCouriersResponse", () -> {
+            var result = service.getCouriers(limit, offset)
+                    .stream()
+                    .map(CourierController::convertToCreatedCourierDto)
+                    .toList();
+            return ResponseEntity.ok(new GetCouriersResponseDto(result, limit, offset));
+        });
     }
 
     @GetMapping("/{courier_id}")
     public ResponseEntity<CreatedCourierDto> getCourier(@PathVariable("courier_id") long id) {
-        var courierById = service.getCourier(id);
-        return courierById.map(CourierController::convertToCreatedCourierDto)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return rateLimiterDecorator.execute("rateLimiter-getCourier", () -> {
+            var courierById = service.getCourier(id);
+            return courierById.map(CourierController::convertToCreatedCourierDto)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        });
+    }
+
+    @GetMapping("/meta-info/{courier_id}")
+    public ResponseEntity<GetCourierMetaInfoResponseDto> getCourierMetaInfoResponseDto(@PathVariable("courier_id") long courierId,
+                                                                                       @RequestParam String startDate,
+                                                                                       @RequestParam String endDate) {
+        return rateLimiterDecorator.execute("rateLimiter-getCourierMetaInfoResponseDto", () -> {
+            Optional<Courier> courierByID = service.getCourier(courierId);
+            if (courierByID.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            Courier courier = courierByID.get();
+            CourierMetaInfo metaInfo = service.calculateMetaInfo(courier,
+                    LocalDate.parse(startDate).atStartOfDay(),
+                    LocalDate.parse(endDate).atStartOfDay());
+            GetCourierMetaInfoResponseDto info = new GetCourierMetaInfoResponseDto(
+                    courier.getId(),
+                    CourierTypeDto.valueOf(courier.getType().name()),
+                    convertToCourierRegionDto(courier.getRegions()),
+                    convertToCourierScheduleDto(courier.getWorkingHours()),
+                    metaInfo.rating(),
+                    metaInfo.earnings()
+            );
+            return ResponseEntity.ok(info);
+        });
     }
 
     private static Set<CourierRegion> convertToCourierRegions(Set<Integer> regions) {

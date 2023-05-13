@@ -22,7 +22,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    // https://mvnrepository.com/artifact/io.github.resilience4j/resilience4j-ratelimiter
+    implementation 'io.github.resilience4j:resilience4j-ratelimiter:2.0.2'
+
+
 }
 
 tasks.named('test') {

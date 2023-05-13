@@ -29,4 +29,7 @@ public class OrderService {
     public Collection<Order> getOrders(Collection<Long> ids) {
         return repository.findAllById(ids);
     }
+    public Collection<Order> updateCompleteTime(Collection<Order> orders) {
+        return repository.saveAll(orders);
+    }
 }
